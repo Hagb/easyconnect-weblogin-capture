@@ -26,7 +26,7 @@ TWFID has been captured: xxxxxx
 Interrupt the connection!
 ```
 
-此外，可以给 socat 加上 `-v` 参数来显示请求的细节，之后将请求细节重定向到某个日志文件 `login.log`：
+此外，可以给 socat 加上 `-v` 参数来输出请求细节，之后可重定向到某个日志文件 `login.log`：
 
 ```bash
 hostname=服务器域名或IP port=服务器HTTPS端口 socat -v ssl-l:反代服务的端口,reuseaddr,fork,cert=证书路径,verify=0 exec:./socat-filter.sh 2>&1 | tee login.log
@@ -48,7 +48,7 @@ mitmdump -m 'reverse:https://服务器HTTPS地址' --ssl-insecure -p 反代服�
 
 捕获到 twfId 时输出与上面基于 socat 的方式一样。
 
-此外，可以给 mitmdump 加上 `--flow-detail 4` 参数来显示请求细节，之后将请求细节重定向到某个日志文件 `login.log`：
+此外，可以给 mitmdump 加上 `--flow-detail 4` 参数来输出请求细节，之后可重定向到某个日志文件 `login.log`：
 
 ```bash
 mitmdump -m 'reverse:https://服务器HTTPS地址' --ssl-insecure -p 反代服务的端口 -s mitmproxy-addon.py --flow-detail 4 | tee login.log
