@@ -1,6 +1,6 @@
 #!/bin/sh
 catch_twfid() {
-	TWFID="$(grep --line-buffered --max-count=1 '^[Cc]ookie:' | sed -E 's/.*TWFID=([^;]*)[; \r]/\1/')"
+	TWFID="$(sed -unE '/^[Cc]ookie:/{s/.*[^A-Za-z]TWFID=([^;]*)[; \r].*/\1/p; q}')"
 	echo "TWFID has been captured: $TWFID" >&2
 	echo "Interrupt the connection!" >&2
 	exec >&-
