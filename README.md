@@ -16,7 +16,8 @@
 在某种 \*nix shell 中运行如下命令（其中证书可以使用自签名证书，EasyConnect 客户端似乎并不验证）
 
 ```bash
-hostname=服务器域名或IP port=服务器HTTPS端口 socat ssl-l:反代的端口,reuseaddr,fork,cert=证书路径,verify=0 exec:./socat-filter.sh
+export cert=证书路径
+hostname=服务器域名或IP port=服务器HTTPS端口 socat ssl-l:反代的端口,reuseaddr,fork,cert="$cert",verify=0 exec:./socat-filter.sh
 ```
 
 捕获到 twfId 时会输出
@@ -29,7 +30,8 @@ Interrupt the connection!
 此外，可以给 socat 加上 `-v` 参数来输出请求细节，之后可重定向到某个日志文件 `login.log`：
 
 ```bash
-hostname=服务器域名或IP port=服务器HTTPS端口 socat -v ssl-l:反代服务的端口,reuseaddr,fork,cert=证书路径,verify=0 exec:./socat-filter.sh 2>&1 | tee login.log
+export cert=证书路径
+hostname=服务器域名或IP port=服务器HTTPS端口 socat -v ssl-l:反代服务的端口,reuseaddr,fork,cert="$cert",verify=0 exec:./socat-filter.sh 2>&1 | tee login.log
 ```
 
 ### 基于 mitmproxy
