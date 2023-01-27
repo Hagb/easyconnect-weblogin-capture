@@ -31,7 +31,16 @@ replace_header() {
 	cat -u
 }
 replace_host() {
-	replace_header '[Hh]ost' "Host: $hostname"
+	replace_header '[Hh]ost' "Host: $hostname:$port"
+}
+replace_redirect() {
+	if [ 443 = "$port" ]; then
+		port_regex="(|:443)"
+	else
+		port_regex=":$port"
+	fi
+	sed -uE '/^(Location:.*\r|\r)$/{s@'"https://$hostname$port_regex"'/@/@;q}'
+	cat -u
 }
 disable_compress() {
 	replace_header "[Aa]ceept-[Ee]ncoding" "Accept-Encoding: "
@@ -60,4 +69,4 @@ replace_content_length() {
 	disable_compress |
 	disable_keep_alive |
 	socat - "ssl:$hostname:$port,verify=0" |
-	disable_keep_alive | replace_content_length | replace_body
+	disable_keep_alive | replace_redirect | replace_content_length | replace_body
